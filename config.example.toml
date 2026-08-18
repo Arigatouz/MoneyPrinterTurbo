@@ -3,7 +3,7 @@
 # credentials in config.toml; do not commit your local config.toml.
 
 # =============================================================================
-# API Service / API 服务
+# API Service
 # =============================================================================
 # Log level: DEBUG, INFO, WARNING, or ERROR.
 log_level = "DEBUG"
@@ -14,23 +14,23 @@ listen_port = 8080
 [app]
 
 # -----------------------------------------------------------------------------
-# General / 通用设置
+# General
 # -----------------------------------------------------------------------------
 
 # Hide the basic configuration panel in the WebUI.
-# 是否隐藏 WebUI 基础配置面板。
 hide_config = false
 
-# Timeout in seconds for a single Edge TTS streaming request.
-# 单次 Edge TTS 流式请求超时时间。慢网络可适当调大，设置为 0 表示禁用超时。
+# Timeout in seconds for a single Edge TTS streaming request. Increase it on a
+# slow connection; 0 disables the timeout entirely.
 edge_tts_timeout = 30
 
-# Verify TLS certificates for external APIs and material downloads.
-# 默认应保持开启；仅在可信代理或自签名证书环境中临时关闭。
+# Verify TLS certificates for external APIs and material downloads. Keep this
+# enabled. Disable it only temporarily, behind a trusted proxy or with a
+# self-signed certificate, since disabling it exposes your API keys.
 tls_verify = true
 
 # -----------------------------------------------------------------------------
-# Video Materials / 视频素材
+# Video Materials
 # -----------------------------------------------------------------------------
 
 # Available values: "pexels", "pixabay", "coverr", "local".
@@ -38,7 +38,6 @@ video_source = "pexels"
 
 # API key lists support key rotation. Use straight ASCII double quotes and
 # separate multiple keys with commas, for example: ["key-1", "key-2"].
-# Key 必须使用英文半角双引号，多个 Key 使用英文逗号分隔。
 
 # Register at https://www.pexels.com/api/
 pexels_api_keys = []
@@ -61,7 +60,8 @@ twelvelabs_rerank_terms = false
 # twelvelabs_pegasus_model = "pegasus1.5"
 
 # Match search terms and downloaded materials to the script narrative order.
-# 默认关闭，开启后会减少随机性，使素材顺序更贴近文案结构。
+# Disabled by default. Enabling it reduces randomness so the footage follows the
+# structure of the narration more closely.
 match_materials_to_script = false
 
 # Optional Sonilo video-matched original background music.
@@ -69,11 +69,12 @@ match_materials_to_script = false
 # this value, or you can set the SONILO_API_KEY environment variable instead.
 sonilo_api_key = ""
 sonilo_base_url = "https://api.sonilo.com"
-# 单次生成流连续无数据时的最长等待秒数；它不是整个请求的总耗时上限。
+# Maximum seconds to wait while a generation stream sends no data. This is an
+# idle timeout, not a cap on the total request duration.
 sonilo_timeout = 600
 
 # -----------------------------------------------------------------------------
-# LLM Providers / 大模型提供商
+# LLM Providers
 # -----------------------------------------------------------------------------
 
 # Provider definitions, default models, and default Base URLs are maintained in
@@ -202,11 +203,15 @@ pollinations_base_url = ""
 pollinations_model_name = ""
 
 # -----------------------------------------------------------------------------
-# Speech, Subtitles, and Video / 语音、字幕与视频
+# Speech, Subtitles, and Video
 # -----------------------------------------------------------------------------
 
 # Xiaomi MiMo TTS shares mimo_api_key and mimo_base_url with the MiMo LLM.
 mimo_tts_model_name = "mimo-v2.5-tts"
+# Style instruction sent to MiMo TTS. Write it in the language you narrate in;
+# the default below is Chinese because MiMo is a Chinese-first provider.
+# English equivalent: "Read this in a natural, clear tone suited to a short-video
+# voice-over."
 mimo_tts_style_prompt = "请用自然、清晰、适合短视频旁白的语气朗读。"
 
 # Subtitle provider: "edge" or "whisper". Whisper is loaded only when selected
@@ -226,7 +231,7 @@ subtitle_provider = "edge"
 # video_codec = "libx264"
 
 # -----------------------------------------------------------------------------
-# Storage and Task Runtime / 存储与任务运行
+# Storage and Task Runtime
 # -----------------------------------------------------------------------------
 
 # Public base URL used to build generated video download links. Leave empty to
@@ -251,7 +256,7 @@ max_concurrent_tasks = 5
 max_queued_tasks = 100
 
 # -----------------------------------------------------------------------------
-# Cross-platform Publishing / 跨平台发布
+# Cross-platform Publishing
 # -----------------------------------------------------------------------------
 
 # Upload-Post can publish generated videos to TikTok, Instagram, and YouTube.
@@ -273,7 +278,7 @@ upload_post_youtube_privacy_status = "public"
 upload_post_max_pending_tasks = 10
 
 # =============================================================================
-# Whisper Subtitles / Whisper 字幕
+# Whisper Subtitles
 # =============================================================================
 
 [whisper]
@@ -290,7 +295,7 @@ compute_type = "int8"
 # initial_prompt = ""
 
 # =============================================================================
-# Material Request Proxy / 素材请求代理
+# Material Request Proxy
 # =============================================================================
 
 [proxy]
@@ -301,7 +306,7 @@ compute_type = "int8"
 # https = "http://127.0.0.1:1080"
 
 # =============================================================================
-# TTS Providers / 语音合成服务
+# TTS Providers
 # =============================================================================
 
 [azure]
@@ -350,20 +355,25 @@ model_id = "chatterbox"
 voices = ["default-Female"]
 
 # =============================================================================
-# WebUI Preferences / WebUI 偏好
+# WebUI Preferences
 # =============================================================================
 
 [ui]
+# Interface language for the WebUI. This takes priority over the browser locale,
+# so pinning it here keeps the interface in English on every machine.
+# Available values: "en", "zh", "de", "es", "id", "pt", "ru", "tr", "vi".
+# The language dropdown in the WebUI top bar rewrites this value when changed.
+language = "en"
+
 # Hide generation logs in the WebUI.
 hide_log = false
 
-# Open the task folder automatically after video generation completes.
-# 视频生成完成后是否自动打开任务目录；关闭后仍可在任务管理中手动打开。
+# Open the task folder automatically after video generation completes. When
+# disabled, the folder can still be opened manually from the Task Manager.
 open_task_folder_on_completion = true
 
 # The WebUI writes the remaining preferences automatically. Uncomment values
 # below only when you want to define initial defaults manually.
-# language = "zh"
 # tts_server = "azure-tts-v1"
 # voice_name = ""
 # font_name = "MicrosoftYaHeiBold.ttc"
